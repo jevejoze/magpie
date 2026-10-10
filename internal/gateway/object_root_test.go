@@ -159,3 +159,16 @@ func TestRootUnionFoldedForXAI(t *testing.T) {
 		t.Fatal("another vendor folded before any refusal")
 	}
 }
+
+// Each vendor's wording of a refused root union is known as one.
+func TestRootUnionRefusalWordings(t *testing.T) {
+	for _, msg := range []string{
+		`[invalid_client_tool_schema] mcp__codex_app__automation_update: tool parameter root must be an object type`,
+		`tools.10.custom.input_schema: input_schema does not support oneOf, allOf, or anyOf at the top level`,
+		`Invalid schema for function 'mcp__codex_app__automation_update': schema must have type 'object' and not have 'oneOf'/'anyOf'/'allOf'/'enum'/'const'/'not' at the top level.`,
+	} {
+		if !rootUnionRefusal.MatchString(msg) {
+			t.Errorf("not known as a root union refusal: %s", msg)
+		}
+	}
+}
